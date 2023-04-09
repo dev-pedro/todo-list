@@ -16,6 +16,20 @@ const insertTodo = event => {
   }
 }
 
+const searchTodoOnList = event => {
+  const inputValue = event.target.value.trim().toLowerCase()
+  const todos = Array.from(todosContainer.children)
+
+  todos.forEach(todo => {
+    const shouldBeVisible = todo.textContent
+      .toLowerCase()
+      .trim()
+      .includes(inputValue)
+    todo.classList.add(shouldBeVisible ? 'd-flex' : 'hidden')
+    todo.classList.remove(shouldBeVisible ? 'hidden' : 'd-flex')
+  })
+}
+
 const removeTodo = event => {
   const clickedElement = event.target
   const convertedClassList = Array.from(clickedElement.classList)
@@ -26,35 +40,15 @@ const removeTodo = event => {
   }
 }
 
-const searchTodoOnList = event => {
-  const inputValue = event.target.value.trim().toLowerCase()
-  Array.from(todosContainer.children)
-    .filter(todo => !todo.textContent.toLocaleLowerCase().includes(inputValue))
-    .forEach(todo => {
-      todo.classList.remove('d-flex')
-      todo.classList.add('hidden')
-    })
-  Array.from(todosContainer.children)
-    .filter(todo => todo.textContent.toLocaleLowerCase().includes(inputValue))
-    .forEach(todo => {
-      todo.classList.remove('hidden')
-      todo.classList.add('d-flex')
-    })
-}
-
-const eventsSubmit = event => {
+const addTodo = event => {
   event.preventDefault()
   insertTodo(event)
 }
 
-const eventTodosContainer = event => {
-  removeTodo(event)
-}
-
-const eventInputSearchTodo = event => {
+const searchTodo = event => {
   searchTodoOnList(event)
 }
 
-formAddTodo.addEventListener('submit', eventsSubmit)
-todosContainer.addEventListener('click', eventTodosContainer)
-inputSearchTodo.addEventListener('input', eventInputSearchTodo)
+formAddTodo.addEventListener('submit', addTodo)
+todosContainer.addEventListener('click', removeTodo)
+inputSearchTodo.addEventListener('input', searchTodo)
